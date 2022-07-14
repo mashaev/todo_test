@@ -12,9 +12,7 @@ class ApiService {
 
       if (response.statusCode == 200) {
         print(
-            'json getCharts decode response is: ${json.decode(response.body)}');
-
-        //cprint('json getPages: ${json.decode(response.body).length}');
+            'json getTodos decode response is: ${json.decode(response.body)}');
 
         return json.decode(response.body);
       } else {
