@@ -1,6 +1,13 @@
+import 'dart:convert';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_task/utils/app_colors.dart';
 
+import '../bloc/todo_bloc.dart';
+import '../model/todo.dart';
 import '../widgets/submit_button.dart';
 
 class AddTask extends StatefulWidget {
@@ -12,33 +19,85 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _deadLineController = TextEditingController();
-  TextEditingController _startTimeController = TextEditingController();
-  TextEditingController _endTimeController = TextEditingController();
-  TextEditingController _remindController = TextEditingController();
-  TextEditingController _repeatController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _deadLineController = TextEditingController();
+  final TextEditingController _startTimeController = TextEditingController();
+  final TextEditingController _endTimeController = TextEditingController();
+  final TextEditingController _remindController = TextEditingController();
+  final TextEditingController _repeatController = TextEditingController();
 
-  void validateAndSave() {
+  void validateAndSave() async {
     final FormState form = _formKey.currentState!;
+
     if (form.validate()) {
-      print('Form is valid');
-    } else {
-      print('Form is invalid');
-    }
-    if (form.validate()) {
+      Random random = Random();
+      int randomNumber = random.nextInt(100);
+      Map<String, dynamic> saveTodo = {
+        "id": randomNumber,
+        "user_id": randomNumber,
+        "title": _titleController.text,
+        "due_on": _startTimeController.text + '-' + _endTimeController.text,
+        "status": 'pending'
+      };
+
+      String encodedMap = json.encode(saveTodo);
+      SharedPreferences session = await SharedPreferences.getInstance();
+      session.setString('todo', encodedMap);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.white,
           content: Text(
             'Validation Successful',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.green,
+            ),
+          ),
+        ),
+      );
+      _clear();
+      String? getMap = session.getString('todo');
+      if (getMap != null) {
+        Map<String, dynamic> decodedMap = json.decode(getMap);
+
+        BlocProvider.of<TodoBloc>(context).addTodo(Todo.fromJson(decodedMap));
+
+        Navigator.of(context).pop();
+      }
+    } else {
+      FocusScope.of(context).unfocus();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.black,
+          content: Text(
+            'Validation is not complete',
+            style: TextStyle(
+              color: Colors.red,
             ),
           ),
         ),
       );
     }
+  }
+
+  void _clear() {
+    _titleController.clear();
+    _deadLineController.clear();
+    _startTimeController.clear();
+    _endTimeController.clear();
+    _remindController.clear();
+    _repeatController.clear();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _titleController.dispose();
+    _deadLineController.dispose();
+    _startTimeController.dispose();
+    _endTimeController.dispose();
+    _remindController.dispose();
+    _repeatController.dispose();
   }
 
   @override
@@ -100,6 +159,7 @@ class _AddTaskState extends State<AddTask> {
                       padding: const EdgeInsets.only(top: 10.0, bottom: 10),
                       child: TextFormField(
                         controller: _deadLineController,
+                        keyboardType: TextInputType.datetime,
                         decoration: const InputDecoration(
                           labelText: '2021-02-28',
                           border: OutlineInputBorder(
@@ -109,7 +169,6 @@ class _AddTaskState extends State<AddTask> {
                             ),
                           ),
                         ),
-                        obscureText: true,
                         validator: (value) =>
                             value!.isEmpty ? 'deadLine cannot be blank' : null,
                       ),

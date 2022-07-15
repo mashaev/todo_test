@@ -6,7 +6,9 @@ import 'package:todo_task/service/api_service.dart';
 
 import 'home_page.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  //session = await SharedPreferences.getInstance();
   runApp(const MyApp());
 }
 
@@ -17,19 +19,18 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String initialPage = '/';
-    return MaterialApp(
-      onGenerateRoute: RouterGlobal.generateRoute,
-      initialRoute: initialPage,
-      debugShowCheckedModeBanner: false,
-      title: 'Todo Task',
-      home: MultiBlocProvider(
-        providers: [
-          BlocProvider<TodoBloc>(
-            create: (BuildContext context) =>
-                TodosBlocImpl(service: ApiService()),
-          ),
-        ],
-        child: const HomePage(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<TodoBloc>(
+          create: (_) => TodosBlocImpl(service: ApiService()),
+        ),
+      ],
+      child: MaterialApp(
+        onGenerateRoute: RouterGlobal.generateRoute,
+        initialRoute: initialPage,
+        debugShowCheckedModeBanner: false,
+        title: 'Todo Task',
+        home: const HomePage(),
       ),
     );
   }

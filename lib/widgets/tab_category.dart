@@ -4,15 +4,10 @@ import 'package:todo_task/bloc/todo_bloc.dart';
 import 'package:todo_task/bloc/todos_state.dart';
 import 'package:todo_task/widgets/todo_widget.dart';
 
-import '../model/todo.dart';
-
 class TabCategory extends StatefulWidget {
-  //final List<Todo>? todos;
-
   // ignore: prefer_const_constructors_in_immutables
   TabCategory({
     Key? key,
-    // this.todos,
   }) : super(key: key);
 
   @override
@@ -30,8 +25,6 @@ class _TabCategoryState extends State<TabCategory> {
           ),
         );
       } else if (state is TodosLoadedState) {
-        //state.todos.;
-
         return SingleChildScrollView(
           child: Column(
             children: List.generate(state.todos.length,

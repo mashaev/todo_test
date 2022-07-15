@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_task/model/todo.dart';
 
 class ApiService {
@@ -8,15 +9,20 @@ class ApiService {
     String url = 'https://gorest.co.in/public/v2/todos';
     List<Todo> todos = [];
     try {
-      //cprint('request getPages $url');
       var response = await http.get(Uri.parse(url));
       var values = json.decode(response.body);
       if (response.statusCode == 200) {
-        print('json getTodos decode response is: $values');
         values.forEach((val) {
-          print('val : $val');
           todos.add(Todo.fromJson(val));
         });
+
+        SharedPreferences session = await SharedPreferences.getInstance();
+        String? encodedMap = session.getString('todo');
+        if (encodedMap != null) {
+          Map<String, dynamic> decodedMap = json.decode(encodedMap);
+          todos.add(Todo.fromJson(decodedMap));
+        }
+
         return todos;
       }
     } catch (error) {

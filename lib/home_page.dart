@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_task/bloc/todo_bloc.dart';
 import 'package:todo_task/screen/add_task.dart';
 import 'package:todo_task/widgets/drawer_widget.dart';
@@ -58,7 +59,11 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   color: Colors.black,
                 )),
             IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  SharedPreferences session =
+                      await SharedPreferences.getInstance();
+                  session.remove('todo');
+                },
                 icon: const Icon(
                   Icons.notifications,
                   color: Colors.black,
@@ -78,34 +83,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               tabs: _tabCaption),
         ),
 
-        body: TabBarView(controller: _controller, children: [
-          Stack(
-            children: [
+        body: Stack(
+          children: [
+            TabBarView(controller: _controller, children: [
               TabCategory(),
-              Positioned(
-                  bottom: 30,
-                  left: 30,
-                  right: 30,
-                  child: SubmitButton(
-                      text: 'Add a task',
-                      onPresd: () {
-                        Navigator.push(
-                          context,
-                          PageRouteBuilder(
-                            pageBuilder: (c, a1, a2) => const AddTask(),
-                            transitionsBuilder: (c, anim, a2, child) =>
-                                FadeTransition(opacity: anim, child: child),
-                            transitionDuration:
-                                const Duration(milliseconds: 2000),
-                          ),
-                        );
-                      })),
-            ],
-          ),
-          TabCategory(),
-          TabCategory(),
-          TabCategory(),
-        ]),
+              TabCategory(),
+              TabCategory(),
+              TabCategory(),
+            ]),
+            Positioned(
+                bottom: 30,
+                left: 30,
+                right: 30,
+                child: SubmitButton(
+                    text: 'Add a task',
+                    onPresd: () {
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (c, a1, a2) => const AddTask(),
+                          transitionsBuilder: (c, anim, a2, child) =>
+                              FadeTransition(opacity: anim, child: child),
+                          transitionDuration:
+                              const Duration(milliseconds: 2000),
+                        ),
+                      );
+                    })),
+          ],
+        ),
         // This trailing comma makes auto-formatting nicer for build methods.
       ),
     );
