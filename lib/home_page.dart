@@ -32,14 +32,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   Widget submitButton() {
     Widget contnt;
     Function()? onPresd;
-    // if (mainCtr.submittingBtn.value) {
-    contnt = new CircularProgressIndicator(
-        valueColor: new AlwaysStoppedAnimation<Color>(Colors.white));
+
     onPresd = () {};
-    //} else {
-    contnt = Text('Отправить', style: TextStyle(color: Colors.white));
-    onPresd = () {};
-    // }
+
+    contnt = const Text('Отправить', style: TextStyle(color: Colors.white));
 
     return SizedBox(
       child: ElevatedButton(
@@ -64,7 +60,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
       child: Scaffold(
         endDrawer: const DrawerWidget(),
         appBar: AppBar(
-          //backgroundColor: Colors.white,
+          backgroundColor: Colors.white,
           title: const Text(
             'Board',
             style: TextStyle(color: Colors.black),

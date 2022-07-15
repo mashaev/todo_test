@@ -9,9 +9,10 @@ class RouterGlobal {
       case '/':
         return MaterialPageRoute(builder: (_) => const HomePage());
       case 'noInternet':
-        return MaterialPageRoute(builder: (_) => NoInternet());
+        return MaterialPageRoute(builder: (_) => const NoInternet());
       default:
         null;
     }
+    return null;
   }
 }
