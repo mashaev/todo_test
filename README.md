@@ -18,9 +18,12 @@ samples, guidance on mobile development, and a full API reference.
 First Run
 
 
-After installing the package dependencies with
-
 flutter pub get
+
+After installing the package dependencies with
 run the code generation tool
+
+Second run
+
 
 flutter pub run build_runner build --delete-conflicting-outputs
