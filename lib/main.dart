@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_task/bloc/todo_bloc.dart';
 import 'package:todo_task/navigation/router_global.dart';
+import 'package:todo_task/service/api_service.dart';
 
 import 'home_page.dart';
 
@@ -19,7 +22,15 @@ class MyApp extends StatelessWidget {
       initialRoute: initialPage,
       debugShowCheckedModeBanner: false,
       title: 'Todo Task',
-      home: const HomePage(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider<TodoBloc>(
+            create: (BuildContext context) =>
+                TodosBlocImpl(service: ApiService()),
+          ),
+        ],
+        child: const HomePage(),
+      ),
     );
   }
 }

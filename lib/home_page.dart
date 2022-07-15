@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_task/bloc/todo_bloc.dart';
+import 'package:todo_task/bloc/todos_state.dart';
 import 'package:todo_task/service/api_service.dart';
 import 'package:todo_task/widgets/drawer_widget.dart';
 import 'package:todo_task/widgets/submit_button.dart';
 import 'package:todo_task/widgets/tab_category.dart';
+
+import 'model/todo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -21,30 +26,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     const Tab(child: Text('favorite')),
   ];
   late TabController _controller;
+
   @override
   void initState() {
     super.initState();
-    ApiService.getTodos();
+
     _controller =
         TabController(vsync: this, length: _tabCaption.length, initialIndex: 0);
-  }
-
-  Widget submitButton() {
-    Widget contnt;
-    Function()? onPresd;
-
-    onPresd = () {};
-
-    contnt = const Text('Отправить', style: TextStyle(color: Colors.white));
-
-    return SizedBox(
-      child: ElevatedButton(
-          onPressed: onPresd,
-          child: contnt,
-          style: ElevatedButton.styleFrom(primary: Colors.green)),
-      height: 40.0,
-      width: 200.0,
-    );
   }
 
   @override

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_task/bloc/todo_bloc.dart';
+import 'package:todo_task/bloc/todos_state.dart';
 
 class TabCategory extends StatefulWidget {
   final String? text;
@@ -15,10 +18,22 @@ class TabCategory extends StatefulWidget {
 class _TabCategoryState extends State<TabCategory> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Center(child: Text(widget.text ?? '')),
-      ],
-    );
+    return BlocBuilder<TodoBloc, TodosState>(builder: (context, state) {
+      if (state is TodosLoadingState) {
+        return const Center(
+          child: CircularProgressIndicator(
+            color: Colors.black,
+          ),
+        );
+      }
+      if (state is TodosLoadedState) {
+        state.todos;
+      }
+      return Column(
+        children: [
+          Center(child: Text(widget.text ?? '')),
+        ],
+      );
+    });
   }
 }
