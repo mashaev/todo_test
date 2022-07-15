@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_task/bloc/todo_bloc.dart';
 import 'package:todo_task/bloc/todos_state.dart';
+import 'package:todo_task/widgets/todo_widget.dart';
+
+import '../model/todo.dart';
 
 class TabCategory extends StatefulWidget {
-  final String? text;
+  //final List<Todo>? todos;
+
   // ignore: prefer_const_constructors_in_immutables
   TabCategory({
     Key? key,
-    this.text,
+    // this.todos,
   }) : super(key: key);
 
   @override
@@ -25,15 +29,17 @@ class _TabCategoryState extends State<TabCategory> {
             color: Colors.black,
           ),
         );
+      } else if (state is TodosLoadedState) {
+        //state.todos.;
+
+        return SingleChildScrollView(
+          child: Column(
+            children: List.generate(state.todos.length,
+                (index) => TodoWidget(todo: state.todos[index])),
+          ),
+        );
       }
-      if (state is TodosLoadedState) {
-        state.todos;
-      }
-      return Column(
-        children: [
-          Center(child: Text(widget.text ?? '')),
-        ],
-      );
+      return const SizedBox();
     });
   }
 }

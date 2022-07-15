@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_task/bloc/todo_bloc.dart';
-import 'package:todo_task/bloc/todos_state.dart';
-import 'package:todo_task/service/api_service.dart';
+import 'package:todo_task/screen/add_task.dart';
 import 'package:todo_task/widgets/drawer_widget.dart';
 import 'package:todo_task/widgets/submit_button.dart';
 import 'package:todo_task/widgets/tab_category.dart';
-
-import 'model/todo.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -30,7 +27,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-
+    BlocProvider.of<TodoBloc>(context).getTodos();
     _controller =
         TabController(vsync: this, length: _tabCaption.length, initialIndex: 0);
   }
@@ -84,25 +81,30 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         body: TabBarView(controller: _controller, children: [
           Stack(
             children: [
+              TabCategory(),
               Positioned(
                   bottom: 30,
                   left: 30,
                   right: 30,
-                  child: SubmitButton(text: 'Add a task', onPresd: () {})),
-              TabCategory(
-                text: 't',
-              ),
+                  child: SubmitButton(
+                      text: 'Add a task',
+                      onPresd: () {
+                        Navigator.push(
+                          context,
+                          PageRouteBuilder(
+                            pageBuilder: (c, a1, a2) => const AddTask(),
+                            transitionsBuilder: (c, anim, a2, child) =>
+                                FadeTransition(opacity: anim, child: child),
+                            transitionDuration:
+                                const Duration(milliseconds: 2000),
+                          ),
+                        );
+                      })),
             ],
           ),
-          TabCategory(
-            text: 'v',
-          ),
-          TabCategory(
-            text: 'b',
-          ),
-          TabCategory(
-            text: 'g',
-          ),
+          TabCategory(),
+          TabCategory(),
+          TabCategory(),
         ]),
         // This trailing comma makes auto-formatting nicer for build methods.
       ),

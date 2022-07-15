@@ -14,6 +14,7 @@ class ApiService {
       if (response.statusCode == 200) {
         print('json getTodos decode response is: $values');
         values.forEach((val) {
+          print('val : $val');
           todos.add(Todo.fromJson(val));
         });
         return todos;

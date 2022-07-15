@@ -8,9 +8,9 @@ part 'todo.g.dart';
 class Todo with _$Todo {
   const factory Todo({
     required int id,
-    required int userId,
+    required int user_id,
     required String title,
-    required String dueOn,
+    required String due_on,
     required String status,
   }) = _Todo;
 

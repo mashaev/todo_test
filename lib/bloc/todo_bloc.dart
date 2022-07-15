@@ -19,6 +19,6 @@ class TodosBlocImpl extends TodoBloc {
     final serviceTodos = await service.getTodos();
     emit(TodosLoadedState(todos: serviceTodos));
 
-    throw UnimplementedError();
+    //throw UnimplementedError();
   }
 }
